@@ -7,7 +7,7 @@ const generateInventory = () => {
   db.Inventory.sync()
     .catch(error => ('Error creating inventory table', error))
     .then(() => {
-      for (i = 0; i < 5000; i++) {
+      for (let i = 0; i < 5000; i++) {
         createProduct();
       }
     })
