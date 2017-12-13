@@ -19,7 +19,7 @@ const Inventory = db.define('inventory', {
   product_description: Sequelize.STRING,
   product_image: Sequelize.STRING,
   category: Sequelize.STRING,
-  price: Sequelize.INTEGER,
+  price: Sequelize.DECIMAL,
   inventory_count: Sequelize.INTEGER,
 });
 
