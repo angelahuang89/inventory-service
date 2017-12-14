@@ -5,33 +5,28 @@ const db = require('./postgres.js');
 
 const generateInventory = () => {
   db.Inventory.sync()
-    .catch(error => ('Error creating inventory table', error))
     .then(() => {
-      for (let i = 0; i < 5000; i++) {
-        createProduct();
-      }
+      createProducts();
     })
-    .then(() => console.log('Successfully created products'))
-    .catch(error => ('Error creating products', error));
+    .catch(error => ('Error creating inventory table', error))
 };
 
-const createProduct = () => {
-  let randomName = faker.commerce.productName();
-  let randomDescription = faker.lorem.sentence();
-  let randomImage = faker.image.imageUrl();
-  let randomCategory = faker.commerce.department();
-  let randomPrice = faker.commerce.price();
-  let randomInventoryCount = Math.floor(Math.random() * 10000);
+const createProducts = () => {
+  let arr = [];
+  for (let i = 0; i < 100000; i++) {
+    let obj = {};
+    obj.product_name = faker.commerce.productName();
+    obj.product_description = faker.lorem.sentence();
+    obj.product_image = faker.image.imageUrl();
+    obj.category = faker.commerce.department();
+    obj.price = faker.commerce.price();
+    obj.inventory_count = Math.floor(Math.random() * 10000);
+    arr.push(obj);
+  }
 
-  db.Inventory.create({
-    product_name: randomName,
-    product_description: randomDescription,
-    product_image: randomImage,
-    category: randomCategory,
-    price: randomPrice,
-    inventory_count: randomInventoryCount,
-  });
-    // .then(inventory => console.log('created new product'));
+  db.Inventory.bulkCreate(arr)
+    .then(inventory => console.log('Created new products'))
+    .catch(error => ('Error creating products', error));
 }
 
 generateInventory();
