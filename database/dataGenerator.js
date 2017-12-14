@@ -3,11 +3,8 @@ const Promise = require('bluebird');
 
 const db = require('./postgres.js');
 
-const generateInventory = () => {
+const checkIfTableExists = () => {
   db.Inventory.sync()
-    .then(() => {
-      createProducts();
-    })
     .catch(error => ('Error creating inventory table', error))
 };
 
@@ -29,4 +26,5 @@ const createProducts = () => {
     .catch(error => ('Error creating products', error));
 }
 
-generateInventory();
+checkIfTableExists();
+createProducts();
