@@ -1,10 +1,10 @@
-# Project Name
+# Inventory Service
 
-The project description
+Inventory service for Bundlin, an Amazon clone.
 
 ## Roadmap
 
-View the project roadmap [here](LINK_TO_DOC)
+View the project roadmap [here](https://docs.google.com/document/d/1cqrKORe5-uFapucIKz-dhaDxJ5TNkJbd1UGnZ2Sd4F8/edit)
 
 ## Contributing
 
