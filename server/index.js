@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('../database/postgres.js');
-const dataGenerator = require('../database/dataGenerator.js');
+// const dataGenerator = require('../database/dataGenerator.js');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -12,6 +12,7 @@ app.options('/', (request, response) => response.json('GET,POST,PUT,PATCH,GET'))
 
 app.get('/client/search/', (request, response) => {
   const { query } = request.query;
+  response.sendStatus(200);
   // search database for products that match query
   // return product results that match query
 });
@@ -27,7 +28,7 @@ app.post('/bundles/inventory', (request, response) => {
 });
 
 app.post('/products/new', (request, response) => {
-  // adds new products to inventory  
+  // adds new products to inventory
 });
 
 app.patch('/products/discontinued', (request, response) => {
