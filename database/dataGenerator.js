@@ -8,9 +8,9 @@ const checkIfTableExists = () => {
     .catch(error => ('Error creating inventory table', error))
 };
 
-const createProducts = () => {
+const createProducts = (number) => {
   let arr = [];
-  for (let i = 0; i < 100000; i++) {
+  for (let i = 0; i < number; i++) {
     let obj = {};
     obj.product_name = faker.commerce.productName();
     obj.product_description = faker.lorem.sentence();
@@ -26,5 +26,8 @@ const createProducts = () => {
     .catch(error => ('Error creating products', error));
 }
 
-checkIfTableExists();
-createProducts();
+// checkIfTableExists();
+// createProducts(100000);
+
+exports.checkIfTableExists = checkIfTableExists;
+exports.createProducts = createProducts;
