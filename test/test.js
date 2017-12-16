@@ -32,6 +32,30 @@ describe('Server', () => {
     });
   });
 
+  describe('Discontinued Products', () => {
+    it('should remove discontinued products to inventory', () => {
+      api.patch('/products/new')
+      .set('Accept', 'application/json')
+      expect(200);
+    });
+  });
+
+  describe('Restock of Products', () => {
+    it('should restock products in inventory', () => {
+      api.patch('/products/new')
+      .set('Accept', 'application/json')
+      expect(200);
+    });
+  });
+
+  describe('Purchases', () => {
+    it('should update inventory after purchases', () => {
+      api.patch('/products/new')
+      .set('Accept', 'application/json')
+      expect(200);
+    });
+  });
+
 });
 
 // describe('Database', function() {
