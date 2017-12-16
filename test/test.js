@@ -10,14 +10,14 @@ const Sequelize = require('sequelize');
 describe('Server', () => {
 
   describe('Options', () => {
-    it('should return options', () => {
+    it('should return options \'GET,POST,PUT,PATCH,GET\'', () => {
       api.options('/')
       expect('GET,POST,PUT,PATCH,GET');
     });
   });
 
   describe('Client Search', () => {
-    it('should return a 200 response', () => {
+    it('should return products matching search term', () => {
       api.get('/client/search')
       .set('Accept', 'application/json')
       expect(200);
@@ -28,31 +28,31 @@ describe('Server', () => {
     it('should add new products to inventory', () => {
       api.post('/products/new')
       .set('Accept', 'application/json')
-      expect(200);
+      expect(201);
     });
   });
 
   describe('Discontinued Products', () => {
     it('should remove discontinued products to inventory', () => {
-      api.patch('/products/new')
+      api.delete('/products/discontinued')
       .set('Accept', 'application/json')
-      expect(200);
+      expect(202);
     });
   });
 
   describe('Restock of Products', () => {
     it('should restock products in inventory', () => {
-      api.patch('/products/new')
+      api.patch('/products/restock')
       .set('Accept', 'application/json')
-      expect(200);
+      expect(204);
     });
   });
 
   describe('Purchases', () => {
     it('should update inventory after purchases', () => {
-      api.patch('/products/new')
+      api.patch('/purchases')
       .set('Accept', 'application/json')
-      expect(200);
+      expect(204);
     });
   });
 

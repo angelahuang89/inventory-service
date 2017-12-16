@@ -8,13 +8,16 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.options('/', (request, response) => response.json('GET,POST,PUT,PATCH,GET'));
+app.options('/', (request, response) => response.json('GET,POST,PUT,PATCH,DELETE'));
 
-app.get('/client/search/', (request, response) => {
-  const { query } = request.query;
-  response.sendStatus(200);
-  // search database for products that match query
-  // return product results that match query
+// search database for products that match query
+// return product results that match query
+app.get('/client/search/:query', (request, response) => {
+  const { params } = request;
+  // db.searchForProducts(params.query)
+  db.searchForProducts('Hat')
+    .then((results) => response.send(results))
+    .catch(error => response.sendStatus(404));
 });
 
 // post requests to /client/inventory and /bundles/inventory
@@ -29,18 +32,22 @@ app.post('/bundles/inventory', (request, response) => {
 
 app.post('/products/new', (request, response) => {
   // adds new products to inventory
+  response.sendStatus(201);
 });
 
-app.patch('/products/discontinued', (request, response) => {
+app.delete('/products/discontinued', (request, response) => {
   // remove discontinued products from inventory
+  response.sendStatus(202);
 });
 
 app.patch('/products/restock', (request, response) => {
   // replenish products in inventory
+  response.sendStatus(204);
 });
 
 app.patch('/purchases', (request, response) => {
   // update inventory count from purchases
+  response.sendStatus(204);
 });
 
 const port = 1337;
