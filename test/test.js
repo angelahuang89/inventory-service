@@ -7,18 +7,26 @@ const Sequelize = require('sequelize');
 // const db = require('../database/postgres.js');
 // const dataGenerator = require('../database/dataGenerator.js');
 
-describe('Server', function() {
+describe('Server', () => {
 
-  describe('Options', function() {
-    it('should return options', function() {
+  describe('Options', () => {
+    it('should return options', () => {
       api.options('/')
       expect('GET,POST,PUT,PATCH,GET');
     });
   });
 
-  describe('Client Search', function() {
-    it('should return a 200 response', function() {
+  describe('Client Search', () => {
+    it('should return a 200 response', () => {
       api.get('/client/search')
+      .set('Accept', 'application/json')
+      expect(200);
+    });
+  });
+
+  describe('New Products', () => {
+    it('should add new products to inventory', () => {
+      api.post('/products/new')
       .set('Accept', 'application/json')
       expect(200);
     });
