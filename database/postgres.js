@@ -23,5 +23,11 @@ const Inventory = db.define('inventory', {
   inventory_count: Sequelize.INTEGER,
 });
 
+const checkIfTableExists = () => {
+  Inventory.sync()
+    .catch(error => ('Error creating inventory table', error))
+};
+
 exports.db = db;
 exports.Inventory = Inventory;
+exports.checkIfTableExists = checkIfTableExists;
