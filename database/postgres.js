@@ -9,6 +9,7 @@ let params = {
 };
 
 const db = new Sequelize('postgres://postgres:password@localhost:5433/bundlin');
+const Op = Sequelize.Op;
 
 db.authenticate()
   .then(() => console.log('Connection established'))
@@ -28,6 +29,23 @@ const checkIfTableExists = () => {
     .catch(error => ('Error creating inventory table', error))
 };
 
+const searchForProducts = (searchTerm) => {
+  let value = searchTerm.toLowerCase();
+  value = `%${value}%`;
+  console.log(value)
+  return Inventory.findAll({
+    where: {
+      [Op.or]:
+        [
+          {product_name: {[Op.iLike]: value}},
+          {product_description: {[Op.iLike]: value}},
+        ]
+    }
+  })
+    .catch(error => console.log('Error in searching database', error));
+}
+
 exports.db = db;
 exports.Inventory = Inventory;
 exports.checkIfTableExists = checkIfTableExists;
+exports.searchForProducts = searchForProducts;
