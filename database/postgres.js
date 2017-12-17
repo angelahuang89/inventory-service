@@ -45,7 +45,7 @@ const searchForProducts = (searchTerm) => {
 }
 
 const addNewProducts = (products) => {
-  Inventory.bulkCreate(products)
+  return Inventory.bulkCreate(products)
     .then(() => {
       const names = products.map(product => product.product_name);
       return Inventory.findAll({
@@ -58,7 +58,7 @@ const addNewProducts = (products) => {
 }
 
 const removeProducts = (productIds) => {
-  Inventory.destroy({
+  return Inventory.destroy({
     where: {
       id: {[Op.or]: productIds}
     }
@@ -67,8 +67,28 @@ const removeProducts = (productIds) => {
    .catch(error => console.error('Error removing discontinued products', error));
 }
 
-const updateProductCounts = (productIds) => {
-  // Inventory.update
+const restockProducts = (productInfo) => {
+  return productInfo.forEach(product => {
+    return Inventory.update({
+      id: product.id
+    }, {
+      where: {
+
+      }
+    })
+  });
+}
+
+const updateProductCounts = (productInfo) => {
+  return productInfo.forEach(product => {
+    return Inventory.update({
+      id: product.id
+    }, {
+      where: {
+
+      }
+    })
+  });
 }
 
 exports.db = db;
@@ -76,3 +96,6 @@ exports.Inventory = Inventory;
 exports.checkIfTableExists = checkIfTableExists;
 exports.searchForProducts = searchForProducts;
 exports.addNewProducts = addNewProducts;
+exports.removeProducts = removeProducts;
+exports.restockProducts = restockProducts;
+exports.updateProductCounts = updateProductCounts;

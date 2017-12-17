@@ -33,22 +33,24 @@ app.post('/bundles/inventory', (request, response) => {
 
 app.post('/products/new', (request, response) => {
   // adds new products to inventory
-  // db.addNewProducts(array of products)
-  response.sendStatus(201);
+  db.addNewProducts(/* array of products */)
+    .then(results => response.send(results))
+    .catch(error => response.sendStatus(404));
   // send ids back
   // send to client and bundles
 });
 
 app.delete('/products/discontinued', (request, response) => {
   // remove discontinued products from inventory
-  // db.removeProducts(array of products)
-  response.sendStatus(202);
+  db.removeProducts(/* array of products */)
+    .then(() => response.sendStatus(202))
+    .catch(error => response.sendStatus(420204));
   // send product ids client and bundles
 });
 
 app.patch('/products/restock', (request, response) => {
   // replenish products in inventory
-  // db.updateProductCounts
+  // db.restockProducts
   response.sendStatus(204);
   // send product ids bundles and inventory
 });
