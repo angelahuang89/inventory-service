@@ -2,7 +2,7 @@ const express = require('express');
 const bluebird = require('bluebird');
 const axios = require('axios');
 const db = require('../database/postgres.js');
-// const dataGenerator = require('../database/dataGenerator.js');
+const dataGenerator = require('../database/dataGenerator.js');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -35,6 +35,7 @@ app.post('/products/new', (request, response) => {
   // adds new products to inventory
   // db.addNewProducts(array of products)
   response.sendStatus(201);
+  // send ids back
   // send to client and bundles
 });
 

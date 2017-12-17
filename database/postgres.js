@@ -45,8 +45,15 @@ const searchForProducts = (searchTerm) => {
 }
 
 const addNewProducts = (products) => {
-  Inventory.bulkCreate(arr)
-    .then(() => console.log('Created new products'))
+  Inventory.bulkCreate(products)
+    .then(() => {
+      const names = products.map(product => product.product_name);
+      return Inventory.findAll({
+        where: {
+          product_name: {[Op.or]: names}
+        }
+      });
+    })
     .catch(error => console.error('Error creating products', error));
 }
 
