@@ -32,20 +32,40 @@ const checkIfTableExists = () => {
 const searchForProducts = (searchTerm) => {
   let value = searchTerm.toLowerCase();
   value = `%${value}%`;
-  console.log(value)
   return Inventory.findAll({
     where: {
       [Op.or]:
-        [
-          {product_name: {[Op.iLike]: value}},
-          {product_description: {[Op.iLike]: value}},
-        ]
+        // [
+        {product_name: {[Op.iLike]: value}},
+          // {product_description: {[Op.iLike]: value}},
+        // ]
     }
   })
     .catch(error => console.log('Error in searching database', error));
+}
+
+const addNewProducts = (products) => {
+  Inventory.bulkCreate(arr)
+    .then(() => console.log('Created new products'))
+    .catch(error => console.error('Error creating products', error));
+}
+
+const removeProducts = (productIds) => {
+  Inventory.destroy({
+    where: {
+      id: {[Op.or]: productIds}
+    }
+  })
+   .then(() => console.log('Removed discontinued products'))
+   .catch(error => console.error('Error removing discontinued products', error));
+}
+
+const updateProductCounts = (productIds) => {
+  // Inventory.update
 }
 
 exports.db = db;
 exports.Inventory = Inventory;
 exports.checkIfTableExists = checkIfTableExists;
 exports.searchForProducts = searchForProducts;
+exports.addNewProducts = addNewProducts;

@@ -22,8 +22,8 @@ const createProducts = (number) => {
   }
 
   db.Inventory.bulkCreate(arr)
-    .then(inventory => console.log('Created new products'))
-    .catch(error => ('Error creating products', error));
+    .then(() => console.log('Created new products'))
+    .catch(error => console.error('Error creating products', error));
 }
 
 // checkIfTableExists();
