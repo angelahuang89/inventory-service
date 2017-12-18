@@ -33,7 +33,7 @@ app.post('/bundles/inventory', (request, response) => {
 
 app.post('/products/new', (request, response) => {
   // adds new products to inventory
-  db.addNewProducts(/* array of products */)
+  db.addNewProducts([{product_name:'hello'}, {product_name:'bye'}])
     .then(results => response.send(results))
     .catch(error => response.sendStatus(404));
   // send ids back

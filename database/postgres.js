@@ -52,6 +52,7 @@ const addNewProducts = (products) => {
         where: {
           product_name: {[Op.or]: names}
         }
+        // return only id attribute
       });
     })
     .catch(error => console.error('Error creating products', error));
@@ -70,24 +71,28 @@ const removeProducts = (productIds) => {
 const restockProducts = (productInfo) => {
   return productInfo.forEach(product => {
     return Inventory.update({
-      id: product.id
+      inventory_count: Sequelize.literal('inventory_count + ${product.restock_count}')
     }, {
       where: {
-
+        id: product.id
       }
     })
+      .then(() => console.log('Updated inventory count after restock'))
+      // .catch(error => console.error('Error updating inventory after restock'), error);
   });
 }
 
 const updateProductCounts = (productInfo) => {
   return productInfo.forEach(product => {
     return Inventory.update({
-      id: product.id
+      inventory_count: Sequelize.literal('inventory_count - ${product.purchase_quantity}')
     }, {
       where: {
-
+        id: product.id
       }
     })
+       .then(() => console.log('Updated inventory count after purchase'))
+       // .catch(error => console.error('Error updating inventory after purchase'), error);
   });
 }
 
