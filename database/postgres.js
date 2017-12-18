@@ -44,6 +44,13 @@ const searchForProducts = (searchTerm) => {
     .catch(error => console.log('Error in searching database', error));
 }
 
+const getProductInfo = (productId) => {
+  return Inventory.findAll({
+    where: {id: productId}
+  })
+    .catch(error => console.error('Error retrieving product info', error));
+}
+
 const addNewProducts = (products) => {
   return Inventory.bulkCreate(products)
     .then(() => {
@@ -100,6 +107,7 @@ exports.db = db;
 exports.Inventory = Inventory;
 exports.checkIfTableExists = checkIfTableExists;
 exports.searchForProducts = searchForProducts;
+exports.getProductInfo = getProductInfo;
 exports.addNewProducts = addNewProducts;
 exports.removeProducts = removeProducts;
 exports.restockProducts = restockProducts;

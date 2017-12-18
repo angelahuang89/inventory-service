@@ -21,6 +21,13 @@ app.get('/client/search/:query', (request, response) => {
     .catch(error => response.sendStatus(404));
 });
 
+app.get('/client/search/:id', (request, response) => {
+  const { params } = request;
+  db.getProductInfo(params.id)
+    .then(result => response.send(result))
+    .catch(error => response.sendStatus(404));
+});
+
 // post requests to /client/inventory and /bundles/inventory
 
 app.post('/client/inventory', (request, response) => {
@@ -33,7 +40,7 @@ app.post('/bundles/inventory', (request, response) => {
 
 app.post('/products/new', (request, response) => {
   // adds new products to inventory
-  db.addNewProducts([{product_name:'hello'}, {product_name:'bye'}])
+  db.addNewProducts(/* array of products */)
     .then(results => response.send(results))
     .catch(error => response.sendStatus(404));
   // send ids back
