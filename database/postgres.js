@@ -58,8 +58,8 @@ const addNewProducts = (products) => {
       return Inventory.findAll({
         where: {
           product_name: {[Op.or]: names}
-        }
-        // return only id attribute
+        },
+        attributes: [id],
       });
     })
     .catch(error => console.error('Error creating products', error));

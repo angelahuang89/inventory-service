@@ -4,6 +4,7 @@ const axios = require('axios');
 const db = require('../database/postgres.js');
 const dataGenerator = require('../database/dataGenerator.js');
 const bodyParser = require('body-parser');
+const bundleSQS = require('../bundleSendSQS')
 
 const app = express();
 
@@ -49,8 +50,9 @@ app.post('/products/new', (request, response) => {
 
 app.delete('/products/discontinued', (request, response) => {
   // remove discontinued products from inventory
-  db.removeProducts(/* array of products */)
-    .then(() => response.sendStatus(202))
+  const { body } = request;
+  db.removeProducts(body.productId)
+    .then(() => bundleSQS.sendProductUpdate())
     .catch(error => response.sendStatus(420204));
   // send product ids client and bundles
 });

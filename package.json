@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/angelahuang89/inventory-service#readme",
   "dependencies": {
+    "aws-sdk": "^2.171.0",
     "axios": "^0.17.1",
     "babel-preset-env": "^1.6.1",
     "bluebird": "^3.5.1",
