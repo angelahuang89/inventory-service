@@ -1,20 +1,19 @@
 const AWS = require('aws-sdk');
-AWS.config.update({region: 'us-west-2'});
+AWS.config.update({region: 'us-west-1'});
 
 const clientSQS = new AWS.SQS({apiVersion: '2012-11-05'});
 
-const queueUrl = 'https://sqs.us-west-2.amazonaws.com/379538513358/clientQueue.fifo';
+const queueUrl = 'https://sqs.us-west-1.amazonaws.com/379538513358/clientQueue';
 
-const sendDiscontiued = (productId) => {
+const sendDiscontinued = (productId) => {
   const params = {
     MessageAttributes: {
       'ProductId': {
         DataType: 'Number',
-        StringValue: productId,
+        StringValue: `${productId}`,
       },
     },
     MessageBody: 'Id information about discontinued product',
-    MessageGroupId: 'Bundle',
     QueueUrl: queueUrl,
   };
 
@@ -28,5 +27,7 @@ const sendDiscontiued = (productId) => {
   });
 }
 
+sendDiscontinued(123456)
+
 exports.clientSQS = clientSQS;
-exports.sendProductUpdate = sendProductUpdate;
+exports.sendDiscontinued = sendDiscontinued;
