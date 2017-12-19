@@ -1,9 +1,9 @@
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-west-2'});
 
-const bundleSQS = new AWS.SQS({apiVersion: '2012-11-05'});
+const clientSQS = new AWS.SQS({apiVersion: '2012-11-05'});
 
-const queueUrl = 'https://sqs.us-west-2.amazonaws.com/379538513358/bundleQueue.fifo';
+const queueUrl = 'https://sqs.us-west-2.amazonaws.com/379538513358/clientQueue.fifo';
 
 const sendDiscontiued = (productId) => {
   const params = {
@@ -18,7 +18,7 @@ const sendDiscontiued = (productId) => {
     QueueUrl: queueUrl,
   };
 
-  bundleSQS.sendMessage(params, (error, data) => {
+  clientSQS.sendMessage(params, (error, data) => {
     if (error) {
       console.log('Error', error);
     } else {
@@ -28,5 +28,5 @@ const sendDiscontiued = (productId) => {
   });
 }
 
-exports.bundleSQS = bundleSQS;
-exports.sendDiscontinued = sendProductUpdate;
+exports.clientSQS = clientSQS;
+exports.sendProductUpdate = sendProductUpdate;
