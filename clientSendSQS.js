@@ -19,15 +19,55 @@ const sendDiscontinued = (productId) => {
 
   clientSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Error', error);
+      console.log('Client queue send error', error);
     } else {
-      console.log('Success', data.MessageId);
+      console.log('Client queue send success', data.MessageId);
       return;
     }
   });
-}
+};
 
-sendDiscontinued(123456)
+const sendNewProduct = (product) => {
+  const params = {
+    MessageAttributes: {
+      'Name': {
+        DataType: 'String',
+        StringValue: product.name,
+      },
+      'Description': {
+        DataType: 'String',
+        StringValue: product.description,
+      },
+      'Image': {
+        DataType: 'String',
+        StringValue: product.image,
+      },
+      'Category': {
+        DataType: 'String',
+        StringValue: product.category,
+      },
+      'Price': {
+        DataType: 'Number',
+        StringValue: product.price,
+      },
+      'Count': {
+        DataType: 'Number',
+        StringValue: product.count,
+      },
+    },
+    MessageBody: 'Information for new product',
+    QueueUrl: queueUrl,
+  };
+
+  clientSQS.sendMessage(params, (error, data) => {
+    if (error) {
+      console.log('Client queue send error', error);
+    } else {
+      console.log('Client queue send success', data.MessageId);
+    }
+  });
+};
 
 exports.clientSQS = clientSQS;
 exports.sendDiscontinued = sendDiscontinued;
+exports.sendNewProduct = sendNewProduct;
