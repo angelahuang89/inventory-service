@@ -27,7 +27,6 @@ const sendRestock = (product) => {
       console.log('Client queue send error', error);
     } else {
       console.log('Client queue send success', data.MessageId);
-      return;
     }
   });
 }
@@ -54,7 +53,6 @@ const sendPurchase = (product) => {
       console.log('Client queue send error', error);
     } else {
       console.log('Client queue send success', data.MessageId);
-      return;
     }
   });
 }
@@ -76,7 +74,6 @@ const sendDiscontinued = (productId) => {
       console.log('Client queue send error', error);
     } else {
       console.log('Client queue send success', data.MessageId);
-      return;
     }
   });
 };
@@ -123,5 +120,7 @@ const sendNewProduct = (product) => {
 };
 
 exports.clientSQS = clientSQS;
+exports.sendRestock = sendRestock
+exports.sendPurchase = sendPurchase;
 exports.sendDiscontinued = sendDiscontinued;
 exports.sendNewProduct = sendNewProduct;

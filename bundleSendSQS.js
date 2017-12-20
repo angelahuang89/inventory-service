@@ -27,7 +27,6 @@ const sendRestock = (product) => {
       console.log('Bundle queue send error', error);
     } else {
       console.log('Bundle queue send success', data.MessageId);
-      return;
     }
   });
 }
@@ -54,7 +53,6 @@ const sendPurchase = (product) => {
       console.log('Bundle queue send error', error);
     } else {
       console.log('Bundle queue send success', data.MessageId);
-      return;
     }
   });
 }
@@ -76,7 +74,6 @@ const sendDiscontinued = (productId) => {
       console.log('Bundle queue send error', error);
     } else {
       console.log('Bundle queue send success', data.MessageId);
-      return;
     }
   });
 };
