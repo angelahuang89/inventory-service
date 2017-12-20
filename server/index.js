@@ -42,8 +42,9 @@ app.post('/bundles/inventory', (request, response) => {
 
 app.post('/products/new', (request, response) => {
   // adds new products to inventory
-  db.addNewProducts(/* array of products */)
-    .then(results => response.send(results))
+  const { body } = request;
+  db.addNewProduct(body)
+    .then(results => response.json(results.dataValues))
     .catch(error => response.sendStatus(404));
   // send ids back
   // send to client and bundles

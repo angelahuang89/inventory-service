@@ -18,7 +18,7 @@ const sendRestock = (product) => {
         StringValue: `${quantity}`,
       },
     },
-    MessageBody: 'Id information about discontinued product',
+    MessageBody: 'Information for restocking product',
     QueueUrl: queueUrl,
   };
 
@@ -45,7 +45,7 @@ const sendPurchase = (product) => {
         StringValue: `${quantity}`,
       },
     },
-    MessageBody: 'Id information about discontinued product',
+    MessageBody: 'Information for decreasing product count',
     QueueUrl: queueUrl,
   };
 

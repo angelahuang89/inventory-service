@@ -49,7 +49,28 @@ const getProductInfo = (productId) => {
     where: {id: productId}
   })
     .catch(error => console.error('Error retrieving product info', error));
-}
+};
+
+const addNewProduct = (obj) => {
+  const product = {};
+  product.product_name = obj.Category.StringValue;
+  product.product_description = parseInt(obj.Count.StringValue, 10);
+  product.product_image = obj.Image.StringValue;
+  product.category = obj.Category.StringValue;
+  product.price = parseInt(obj.Price.StringValue, 10);
+  product.inventory_count = parseInt(obj.Count.StringValue, 10);
+
+  return Inventory.create(product)
+    .then(() => {
+      return Inventory.findAll({
+        where: {
+          product_name: product.product_name
+        },
+        attributes: ['product_name', 'id'],
+      })
+    .catch(error => console.error('Error creating product', error));
+  });
+};
 
 const addNewProducts = (products) => {
   return Inventory.bulkCreate(products)
@@ -59,11 +80,11 @@ const addNewProducts = (products) => {
         where: {
           product_name: {[Op.or]: names}
         },
-        attributes: [id],
+        attributes: ['product_name', 'id'],
       });
     })
     .catch(error => console.error('Error creating products', error));
-}
+};
 
 const removeProducts = (productIds) => {
   return Inventory.destroy({
@@ -73,7 +94,7 @@ const removeProducts = (productIds) => {
   })
    .then(() => console.log('Removed discontinued products'))
    .catch(error => console.error('Error removing discontinued products', error));
-}
+};
 
 const restockProducts = (productInfo) => {
   return productInfo.forEach(product => {
@@ -87,7 +108,7 @@ const restockProducts = (productInfo) => {
       .then(() => console.log('Updated inventory count after restock'))
       // .catch(error => console.error('Error updating inventory after restock'), error);
   });
-}
+};
 
 const updateProductCounts = (productInfo) => {
   return productInfo.forEach(product => {
@@ -101,13 +122,14 @@ const updateProductCounts = (productInfo) => {
        .then(() => console.log('Updated inventory count after purchase'))
        // .catch(error => console.error('Error updating inventory after purchase'), error);
   });
-}
+};
 
 exports.db = db;
 exports.Inventory = Inventory;
 exports.checkIfTableExists = checkIfTableExists;
 exports.searchForProducts = searchForProducts;
 exports.getProductInfo = getProductInfo;
+exports.addNewProduct = addNewProduct;
 exports.addNewProducts = addNewProducts;
 exports.removeProducts = removeProducts;
 exports.restockProducts = restockProducts;

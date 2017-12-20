@@ -5,6 +5,60 @@ const clientSQS = new AWS.SQS({apiVersion: '2012-11-05'});
 
 const queueUrl = 'https://sqs.us-west-1.amazonaws.com/379538513358/clientQueue';
 
+const sendRestock = (product) => {
+  const { productId, quantity } = product;
+  const params = {
+    MessageAttributes: {
+      'ProductId': {
+        DataType: 'Number',
+        StringValue: `${productId}`,
+      },
+      'Quantity': {
+        DataType: 'Number',
+        StringValue: `${quantity}`,
+      },
+    },
+    MessageBody: 'Information for restocking product',
+    QueueUrl: queueUrl,
+  };
+
+  clientSQS.sendMessage(params, (error, data) => {
+    if (error) {
+      console.log('Client queue send error', error);
+    } else {
+      console.log('Client queue send success', data.MessageId);
+      return;
+    }
+  });
+}
+
+const sendPurchase = (product) => {
+  const { productId, quantity } = product;
+  const params = {
+    MessageAttributes: {
+      'ProductId': {
+        DataType: 'Number',
+        StringValue: `${productId}`,
+      },
+      'Quantity': {
+        DataType: 'Number',
+        StringValue: `${quantity}`,
+      },
+    },
+    MessageBody: 'Information for decreasing product count',
+    QueueUrl: queueUrl,
+  };
+
+  clientSQS.sendMessage(params, (error, data) => {
+    if (error) {
+      console.log('Client queue send error', error);
+    } else {
+      console.log('Client queue send success', data.MessageId);
+      return;
+    }
+  });
+}
+
 const sendDiscontinued = (productId) => {
   const params = {
     MessageAttributes: {
