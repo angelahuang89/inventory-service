@@ -53,7 +53,7 @@ const getProductInfo = (productId) => {
 
 const addNewProduct = (obj) => {
   const product = {};
-  product.product_name = obj.Category.StringValue;
+  product.product_name = obj.Name.StringValue;
   product.product_description = parseInt(obj.Count.StringValue, 10);
   product.product_image = obj.Image.StringValue;
   product.category = obj.Category.StringValue;
@@ -96,32 +96,38 @@ const removeProducts = (productIds) => {
    .catch(error => console.error('Error removing discontinued products', error));
 };
 
-const restockProducts = (productInfo) => {
-  return productInfo.forEach(product => {
+const restockProducts = (product) => {
+  // return productInfo.forEach(product => {
+    const productId = parseInt(product.ProductId.StringValue, 10);
+    const quantity = parseInt(product.Quantity.StringValue, 10);
     return Inventory.update({
-      inventory_count: Sequelize.literal('inventory_count + ${product.restock_count}')
+      inventory_count: Sequelize.literal(`inventory_count + ${quantity}`)
     }, {
       where: {
-        id: product.id
+        id: productId
       }
     })
       .then(() => console.log('Updated inventory count after restock'))
       // .catch(error => console.error('Error updating inventory after restock'), error);
-  });
+  // });
 };
 
-const updateProductCounts = (productInfo) => {
-  return productInfo.forEach(product => {
+const updateProductCounts = (product) => {
+  // return productInfo.forEach(product => {
+    const productId = parseInt(product.ProductId.StringValue, 10);
+    const quantity = parseInt(product.Quantity.StringValue, 10);
+    console.log(quantity)
+    console.log(typeof quantity)
     return Inventory.update({
-      inventory_count: Sequelize.literal('inventory_count - ${product.purchase_quantity}')
+      inventory_count: Sequelize.literal(`inventory_count - ${quantity}`)
     }, {
       where: {
-        id: product.id
+        id: productId
       }
     })
        .then(() => console.log('Updated inventory count after purchase'))
        // .catch(error => console.error('Error updating inventory after purchase'), error);
-  });
+  // });
 };
 
 exports.db = db;

@@ -32,44 +32,60 @@ app.get('/client/search/:id', (request, response) => {
 
 // post requests to /client/inventory and /bundles/inventory
 
-app.post('/client/inventory', (request, response) => {
+// app.post('/client/inventory', (request, response) => {
   // send inventory information to client
-});
+// });
 
-app.post('/bundles/inventory', (request, response) => {
+// app.post('/bundles/inventory', (request, response) => {
   // send inventory information to inventory
-});
+// });
 
 app.post('/products/new', (request, response) => {
   // adds new products to inventory
   const { body } = request;
   db.addNewProduct(body)
-    .then(results => response.json(results.dataValues))
+    .then(results => {
+      clientSQS.sendNewProduct(results.dataValues);
+      bundleSQS.sendNewProduct(results.dataValues);
+      response.json(results.dataValues);
+    })
     .catch(error => response.sendStatus(404));
-  // send ids back
-  // send to client and bundles
 });
 
 app.delete('/products/discontinued', (request, response) => {
   // remove discontinued products from inventory
   const { body } = request;
   db.removeProducts(body.productId)
-    .then(() => clientSQS.sendDiscontinued())
-    .then(() => bundleSQS.sendDiscontinued())
-    .catch(error => response.sendStatus(420204));
+    .then(() => {
+      clientSQS.sendDiscontinued(body.productId);
+      bundleSQS.sendDiscontinued(body.productId);
+      response.sendStatus(204);
+    })
+    .catch(error => response.sendStatus(404));
 });
 
 app.patch('/products/restock', (request, response) => {
   // replenish products in inventory
-  // db.restockProducts
-  response.sendStatus(204);
-  // send product ids bundles and inventory
+  const { body } = request;
+  db.restockProducts(body)
+    .then(results => {
+      clientSQS.sendRestock(results.dataValues);
+      bundleSQS.sendRestock(results.dataValues);
+      response.sendStatus(204);
+    })
+    .catch(error => response.sendStatus(404));
 });
 
 app.patch('/purchases', (request, response) => {
   // update inventory count from purchases using product ids
-  // db.updateProductCounts
-  response.sendStatus(204);
+  const { body } = request;
+  db.updateProductCounts(body)
+    .then(results => {
+      clientSQS.sendPurchase(results.dataValues);
+      bundleSQS.sendPurchase(results.dataValues);
+      response.sendStatus(204);
+    })
+    .catch(error => response.sendStatus(404));
 });
 
 const port = 1337;
