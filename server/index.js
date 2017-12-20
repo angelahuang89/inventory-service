@@ -4,8 +4,8 @@ const axios = require('axios');
 const db = require('../database/postgres.js');
 const dataGenerator = require('../database/dataGenerator.js');
 const bodyParser = require('body-parser');
-const bundleSQS = require('../bundleSendSQS');
-const clientSQS = require('../clientSendSQS');
+const bundleSQS = require('../sqs/bundleSendSQS');
+const clientSQS = require('../sqs/clientSendSQS');
 
 const app = express();
 
