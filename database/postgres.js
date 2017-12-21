@@ -53,8 +53,13 @@ const getProductInfo = (productId) => {
 
 const addNewProduct = (product) => {
   return Inventory.create(product)
-    .then(results => {
-      return results.dataValues;
+    .then((results) => {
+      return Inventory.findOne({
+        where: {
+          product_name: product.product_name
+        },
+        attributes: ['product_name', 'id'],
+      })
     })
     .catch(error => console.error('Error creating product'));
 };
