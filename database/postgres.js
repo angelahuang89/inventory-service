@@ -51,25 +51,12 @@ const getProductInfo = (productId) => {
     .catch(error => console.error('Error retrieving product info', error));
 };
 
-const addNewProduct = (obj) => {
-  const product = {};
-  product.product_name = obj.Name.StringValue;
-  product.product_description = parseInt(obj.Count.StringValue, 10);
-  product.product_image = obj.Image.StringValue;
-  product.category = obj.Category.StringValue;
-  product.price = parseInt(obj.Price.StringValue, 10);
-  product.inventory_count = parseInt(obj.Count.StringValue, 10);
-
+const addNewProduct = (product) => {
   return Inventory.create(product)
-    .then(() => {
-      return Inventory.findAll({
-        where: {
-          product_name: product.product_name
-        },
-        attributes: ['product_name', 'id'],
-      })
-    .catch(error => console.error('Error creating product', error));
-  });
+    .then(results => {
+      return results.dataValues;
+    })
+    .catch(error => console.error('Error creating product'));
 };
 
 const addNewProducts = (products) => {
@@ -84,6 +71,14 @@ const addNewProducts = (products) => {
       });
     })
     .catch(error => console.error('Error creating products', error));
+};
+
+const removeProduct = (productId) => {
+  return Inventory.destroy({
+    where: {id: productId}
+  })
+    .then(() => console.log('Remove discontinued product'))
+    .catch(error => console.error('Error removing discontinued products', error));
 };
 
 const removeProducts = (productIds) => {

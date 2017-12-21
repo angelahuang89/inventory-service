@@ -45,9 +45,9 @@ app.post('/products/new', (request, response) => {
   const { body } = request;
   db.addNewProduct(body)
     .then(results => {
-      clientSQS.sendNewProduct(results.dataValues);
-      bundleSQS.sendNewProduct(results.dataValues);
-      response.json(results.dataValues);
+      clientSQS.sendNewProduct(results);
+      bundleSQS.sendNewProduct(results);
+      response.json(results);
     })
     .catch(error => response.sendStatus(404));
 });
