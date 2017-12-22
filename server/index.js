@@ -30,16 +30,6 @@ app.get('/client/search/:id', (request, response) => {
     .catch(error => response.sendStatus(404));
 });
 
-// post requests to /client/inventory and /bundles/inventory
-
-// app.post('/client/inventory', (request, response) => {
-  // send inventory information to client
-// });
-
-// app.post('/bundles/inventory', (request, response) => {
-  // send inventory information to inventory
-// });
-
 app.post('/products/new', (request, response) => {
   // adds new products to inventory
   const { body } = request;
