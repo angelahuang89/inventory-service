@@ -1,0 +1,31 @@
+config:
+  target: 'http://localhost:1337'
+  processor: './faker.js'
+  phases:
+    - duration: 60
+      arrivalRate: 100
+  # defaults:
+  #   headers:
+  #     x-my-service-auth: '987401838271002188298567'
+  # payload:
+  #   path: "products.csv"
+  #   fields:
+  #     - "product_name"
+  #     - "product_description"
+  #     - "product_image"
+  #     - "category"
+  #     - "price"
+  #     - "inventory_count"
+scenarios:
+  - name: 'Add new product'
+  - flow:
+    - function: 'generateRandomProduct'
+    - post:
+        url: '/products/new'
+        json:
+          product_name: "{{ product_name }}"
+          product_description: "{{ product_description }}"
+          product_image: "{{ product_image }}"
+          category: "{{ category }}"
+          price: "{{ price }}"
+          inventory_count: "{{ inventory_count }}"
