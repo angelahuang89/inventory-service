@@ -34,9 +34,11 @@ const searchForProducts = (searchTerm) => {
   value = `%${value}%`;
   return Inventory.findAll({
     where: {
-      [Op.or]:
+      // [Op.or]:
         // [
-        {product_name: {[Op.iLike]: value}},
+        // {
+          product_name: {[Op.iLike]: value}
+        // },
           // {product_description: {[Op.iLike]: value}},
         // ]
     }

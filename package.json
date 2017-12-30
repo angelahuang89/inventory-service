@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/angelahuang89/inventory-service#readme",
   "dependencies": {
+    "artillery": "^1.6.0-12",
     "aws-sdk": "^2.171.0",
     "axios": "^0.17.1",
     "babel-preset-env": "^1.6.1",
@@ -32,6 +33,7 @@
     "pg": "^7.4.0",
     "request": "^2.83.0",
     "sequelize": "^4.28.0",
+    "sqs-consumer": "^3.8.0",
     "supertest": "^3.0.0"
   }
 }
