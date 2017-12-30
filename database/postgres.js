@@ -44,7 +44,16 @@ const searchForProducts = (searchTerm) => {
     }
   })
     .catch(error => console.log('Error in searching database', error));
-}
+};
+
+const searchById = (productIds) => {
+  return Inventory.findAll({
+    where: {
+      id: {[Op.or]: productIds}
+    }
+  })
+    .catch(error => console.log('Error finding products by id', error));
+};
 
 const getProductInfo = (productId) => {
   return Inventory.findAll({
@@ -131,6 +140,7 @@ exports.db = db;
 exports.Inventory = Inventory;
 exports.checkIfTableExists = checkIfTableExists;
 exports.searchForProducts = searchForProducts;
+exports.searchById = searchById;
 exports.getProductInfo = getProductInfo;
 exports.addNewProduct = addNewProduct;
 exports.addNewProducts = addNewProducts;
