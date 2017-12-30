@@ -20,6 +20,15 @@ const generateProduct = (userContext, events, done) => {
   return done();
 }
 
+const getQuery = (userContext, events,done) => {
+  const products = ['hat', 'towels', 'shirt', 'tuna', 'table', 'bike', 'hat', 'bacon', 'ball', 'soap', 'computer', 'salad', 'keyboard', 'pizza'];
+
+  userContext.vars.query = products[Math.floor(Math.random() * products.length)];
+
+  return done();
+}
+
 module.exports = {
-  generateProduct
+  generateProduct,
+  getQuery
 };

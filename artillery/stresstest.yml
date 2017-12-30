@@ -2,23 +2,27 @@ config:
   target: 'http://localhost:1337'
   phases:
     - duration: 1
-      arrivalRate: 10000
+      arrivalRate: 100
   # defaults:
   #   headers:
   #     x-my-service-auth: '987401838271002188298567'
   processor: './productFaker.js'
 
 scenarios:
-  - name: 'Add new product'
+  - name: 'Simulate interactions'
     flow:
-    - function: 'generateProduct'
-    - post:
-        url: '/products/new'
-        json:
-          product_name: "{{ product_name }}"
-          product_description: "{{ product_description }}"
-          product_image: "{{ product_image }}"
-          category: "{{ category }}"
-          price: "{{ price }}"
-          inventory_count: "{{ inventory_count }}"
-    - log: "Sent a request to /products/new with {{ product_name }}, {{ product_description }}, {{ product_image }}, {{ category }}, {{ price }}, {{ inventory_count }}"
+      - function: 'getQuery'
+      - get:
+          url: '/client/search/{{ query }}'
+      - log: 'Sent a request to /client/search with {{ query }}'
+      - function: 'generateProduct'
+      - post:
+          url: '/products/new'
+          json:
+            product_name: '{{ product_name }}'
+            product_description: '{{ product_description }}'
+            product_image: '{{ product_image }}'
+            category: '{{ category }}'
+            price: '{{ price }}'
+            inventory_count: '{{ inventory_count }}'
+      - log: 'Sent a request to /products/new with {{ product_name }}, {{ product_description }}, {{ product_image }}, {{ category }}, {{ price }}, {{ inventory_count }}'
