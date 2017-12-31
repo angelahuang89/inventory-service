@@ -8,14 +8,14 @@ let params = {
   dialectOptions: { ssl: true },
 };
 
-const db = new Sequelize('postgres://postgres:password@localhost:5433/bundlin');
+const orm = new Sequelize('postgres://postgres:password@localhost:5433/bundlin');
 const Op = Sequelize.Op;
 
-db.authenticate()
+orm.authenticate()
   .then(() => console.log('Connection established'))
   .catch(err => console.error('Connection error'));
 
-const Inventory = db.define('inventory', {
+const Inventory = orm.define('inventory', {
   product_name: Sequelize.STRING,
   product_description: Sequelize.STRING,
   product_image: Sequelize.STRING,
@@ -136,7 +136,7 @@ const updateProductCounts = (product) => {
   // });
 };
 
-exports.db = db;
+exports.orm = orm;
 exports.Inventory = Inventory;
 exports.checkIfTableExists = checkIfTableExists;
 exports.searchForProducts = searchForProducts;
