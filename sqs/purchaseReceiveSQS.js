@@ -14,6 +14,7 @@ const queueUrl = 'https://sqs.us-west-1.amazonaws.com/379538513358/purchaseQueue
 const app = Consumer.create({
   queueUrl: queueUrl,
   messageAttributeNames: ['ProductId, Quantity'],
+  waitTimeSeconds: 10,
   handleMessage: (message, done) => {
     const product = message.MessageAttributes;
     axios.patch('http://localhost:1337/purchases', product)

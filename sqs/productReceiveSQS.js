@@ -14,6 +14,7 @@ const queueUrl = 'https://sqs.us-west-1.amazonaws.com/379538513358/productQueue'
 const app = Consumer.create({
   queueUrl: queueUrl,
   messageAttributeNames: ['Name', 'Description', 'Image', 'Category', 'Price', 'Count', 'ProductId', 'Quantity'],
+  waitTimeSeconds: 10,
   handleMessage: (message, done) => {
     console.log(message)
     const product = {};
