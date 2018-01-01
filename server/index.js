@@ -1,9 +1,10 @@
 const express = require('express');
 const bluebird = require('bluebird');
 const axios = require('axios');
-const db = require('../database/postgres.js');
-const dataGenerator = require('../database/dataGenerator.js');
 const bodyParser = require('body-parser');
+const db = require('../database/postgres');
+const dataGenerator = require('../database/dataGenerator');
+const cache = require('../cache/redis');
 const bundleSQS = require('../sqs/bundleSendSQS');
 const clientSQS = require('../sqs/clientSendSQS');
 
@@ -18,9 +19,15 @@ app.options('/', (request, response) => response.json('GET,POST,PUT,PATCH,DELETE
 // return product results that match query
 app.get('/client/search/:query', (request, response) => {
   const { params } = request;
-  db.searchForProducts(params.query)
+  cache.retrieveIds(params.query)
+    .then(productIds => {
+      return db.searchById(productIds);
+    })
     .then(results => response.send(results))
     .catch(error => response.sendStatus(404));
+  // db.searchForProducts(params.query)
+  //   .then(results => response.send(results))
+  //   .catch(error => response.sendStatus(404));
 });
 
 app.get('/client/search/:id', (request, response) => {
@@ -35,6 +42,8 @@ app.post('/products/new', (request, response) => {
   const { body } = request;
   db.addNewProduct(body)
     .then(results => {
+      const { product_name, id } = results;
+      cache.addProductToCache(product_name, id);
       clientSQS.sendNewProduct(results);
       bundleSQS.sendNewProduct(results);
       response.json(results);
@@ -44,11 +53,12 @@ app.post('/products/new', (request, response) => {
 
 app.delete('/products/discontinued', (request, response) => {
   // remove discontinued products from inventory
-  const { body } = request;
-  db.removeProducts(body.productId)
+  const { product_name, id  } = request.body;
+  db.removeProducts(id)
     .then(() => {
-      clientSQS.sendDiscontinued(body.productId);
-      bundleSQS.sendDiscontinued(body.productId);
+      cache.removeFromCache(product_name, id);
+      clientSQS.sendDiscontinued(id);
+      bundleSQS.sendDiscontinued(id);
       response.sendStatus(204);
     })
     .catch(error => response.sendStatus(404));
