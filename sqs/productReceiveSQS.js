@@ -16,23 +16,25 @@ const app = Consumer.create({
   messageAttributeNames: ['Name', 'Description', 'Image', 'Category', 'Price', 'Count', 'ProductId', 'Quantity'],
   waitTimeSeconds: 10,
   handleMessage: (message, done) => {
-    console.log(message)
     const product = {};
     product.product_name = message.MessageAttributes.Name.StringValue;
-    product.product_description = message.MessageAttributes.Description.StringValue;
-    product.product_image = message.MessageAttributes.Image.StringValue;
-    product.category = message.MessageAttributes.Category.StringValue;
-    product.price = parseInt(message.MessageAttributes.Price.StringValue, 10);
-    product.inventory_count = parseInt(message.MessageAttributes.Count.StringValue);
     if (message.Body === 'Information for new product') {
+      product.product_description = message.MessageAttributes.Description.StringValue;
+      product.product_image = message.MessageAttributes.Image.StringValue;
+      product.category = message.MessageAttributes.Category.StringValue;
+      product.price = parseInt(message.MessageAttributes.Price.StringValue, 10);
+      product.inventory_count = parseInt(message.MessageAttributes.Count.StringValue);
       axios.post('http://localhost:1337/products/new', product)
         .then(() => done())
         .catch(error => console.log(error));
     } else if (message.Body === 'Information for restocking product') {
+      product.id = message.MessageAttributes.ProductId;
+      product.quantity = message.MessageAttributes.Quantity;
       axios.patch('http://localhost:1337/products/restock', product)
         .then(() => done())
         .catch(error => console.log(error));
     } else if (message.Body === 'Information for discontinuing product') {
+      product.id = message.MessageAttributes.ProductId;
       axios.delete('http://localhost:1337/products/discontinued', product)
         .then(() => done())
         .catch(error => console.log(error));

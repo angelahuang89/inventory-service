@@ -63,10 +63,14 @@ const restockProduct = (product) => {
   // product.id = Math.floor(Math.random() * 2000000);
   // product.quantity = Math.floor(Math.random() * 10000);
 
-  const { id, quantity } = product;
+  const { name, id, quantity } = product;
 
   const params = {
     MessageAttributes: {
+      'Name': {
+        DataType: 'Number',
+        StringValue: name,
+      },
       'ProductId': {
         DataType: 'Number',
         StringValue: `${id}`,
@@ -90,11 +94,17 @@ const restockProduct = (product) => {
   });
 };
 
-const discontinueProduct = () => {
-  id = Math.floor(Math.random() * 100000);
+const discontinueProduct = (product) => {
+  // id = Math.floor(Math.random() * 100000);
+
+  const { name, id } = product;
 
   const params = {
     MessageAttributes: {
+      'Name': {
+        DataType: 'Number',
+        StringValue: name,
+      },
       'ProductId': {
         DataType: 'Number',
         StringValue: `${id}`,
