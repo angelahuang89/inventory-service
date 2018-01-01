@@ -41,8 +41,12 @@ const searchForProducts = (searchTerm) => {
         // },
           // {product_description: {[Op.iLike]: value}},
         // ]
-    }
+    },
+    limit: 1000,
   })
+    .then(results => {
+      return results;
+    })
     .catch(error => console.log('Error in searching database', error));
 };
 
