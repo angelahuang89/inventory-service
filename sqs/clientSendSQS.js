@@ -24,7 +24,7 @@ const sendRestock = (product) => {
 
   clientSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Client queue send error', error);
+      console.error('Client queue send error', error);
     } else {
       console.log('Client queue send success', data.MessageId);
     }
@@ -50,7 +50,7 @@ const sendPurchase = (product) => {
 
   clientSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Client queue send error', error);
+      console.error('Client queue send error', error);
     } else {
       console.log('Client queue send success', data.MessageId);
     }
@@ -71,7 +71,7 @@ const sendDiscontinued = (productId) => {
 
   clientSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Client queue send error', error);
+      console.error('Client queue send error', error);
     } else {
       console.log('Client queue send success', data.MessageId);
     }
@@ -116,7 +116,7 @@ const sendNewProduct = (product) => {
 
   clientSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Client queue send error', error);
+      console.error('Client queue send error', error);
     } else {
       console.log('Client queue send success', data.MessageId);
     }

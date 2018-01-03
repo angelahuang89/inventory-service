@@ -24,7 +24,7 @@ const sendRestock = (product) => {
 
   bundleSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Bundle queue send error', error);
+      console.error('Bundle queue send error', error);
     } else {
       console.log('Bundle queue send success', data.MessageId);
     }
@@ -50,7 +50,7 @@ const sendPurchase = (product) => {
 
   bundleSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Bundle queue send error', error);
+      console.error('Bundle queue send error', error);
     } else {
       console.log('Bundle queue send success', data.MessageId);
     }
@@ -71,7 +71,7 @@ const sendDiscontinued = (productId) => {
 
   bundleSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Bundle queue send error', error);
+      console.error('Bundle queue send error', error);
     } else {
       console.log('Bundle queue send success', data.MessageId);
     }
@@ -116,7 +116,7 @@ const sendNewProduct = (product) => {
 
   bundleSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Bundle queue send error', error);
+      console.error('Bundle queue send error', error);
     } else {
       console.log('Bundle queue send success', data.MessageId);
     }
