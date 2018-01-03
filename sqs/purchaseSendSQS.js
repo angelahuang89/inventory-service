@@ -29,7 +29,7 @@ const sendPurchase = () => {
 
   purchaseSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Purchase queue send error', error);
+      console.error('Purchase queue send error', error);
     } else {
       console.log('Purchase queue send success', data.MessageId);
       return;

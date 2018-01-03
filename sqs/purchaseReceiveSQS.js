@@ -19,7 +19,7 @@ const app = Consumer.create({
     const product = message.MessageAttributes;
     axios.patch('http://localhost:1337/purchases', product)
       .then(() => done())
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
     done();
   }
 });
@@ -46,7 +46,7 @@ app.start();
 //
 //   purchaseSQS.receiveMessage(params, (error, data) => {
 //     if (error) {
-//       console.log('Client queue receive error', error);
+//       console.error('Client queue receive error', error);
 //     } else if (data.Messages) {
 //       data.Messages.forEach(message => {
 //         product = message.MessageAttributes;
@@ -58,9 +58,9 @@ app.start();
 //             };
 //             purchaseSQS.deleteMessage(deleteParams, (error, data) => {
 //               if (error) {
-//                 console.log('Client queue delete error', error);
+//                 console.error('Client queue delete error', error);
 //               } else {
-//                 console.log('Client queue message deleted', data);
+//                 console.error('Client queue message deleted', data);
 //               }
 //             });
 //       });

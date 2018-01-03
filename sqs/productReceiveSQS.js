@@ -26,18 +26,18 @@ const app = Consumer.create({
       product.inventory_count = parseInt(message.MessageAttributes.Count.StringValue);
       axios.post('http://localhost:1337/products/new', product)
         .then(() => done())
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
     } else if (message.Body === 'Information for restocking product') {
       product.id = message.MessageAttributes.ProductId;
       product.quantity = message.MessageAttributes.Quantity;
       axios.patch('http://localhost:1337/products/restock', product)
         .then(() => done())
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
     } else if (message.Body === 'Information for discontinuing product') {
       product.id = message.MessageAttributes.ProductId;
       axios.delete('http://localhost:1337/products/discontinued', product)
         .then(() => done())
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
     }
   }
 });
@@ -64,7 +64,7 @@ app.start();
 //
 //   productSQS.receiveMessage(params, (error, data) => {
 //     if (error) {
-//       console.log('Product queue receive error', error);
+//       console.error('Product queue receive error', error);
 //     } else if (data.Messages) {
 //       // data.Messages.forEach(message => {
 //         // const product = message.MessageAttributes;
@@ -86,14 +86,14 @@ app.start();
 //               };
 //               productSQS.deleteMessage(deleteParams, (error, data) => {
 //                 if (error) {
-//                   console.log('Product queue delete error', error);
+//                   console.error('Product queue delete error', error);
 //                 } else {
-//                   console.log('Product queue message deleted', data);
+//                   console.error('Product queue message deleted', data);
 //                 }
 //               });
 //             })
 //             .catch(error => {
-//               console.log(error);
+//               console.error(error);
 //             });
 //         } else if (obj.Body === 'Information for restocking product') {
 //           axios.patch('http://localhost:1337/products/restock', product)
@@ -105,14 +105,14 @@ app.start();
 //               };
 //               productSQS.deleteMessage(deleteParams, (error, data) => {
 //                 if (error) {
-//                   console.log('Product queue delete error', error);
+//                   console.error('Product queue delete error', error);
 //                 } else {
-//                   console.log('Product queue message deleted', data);
+//                   console.error('Product queue message deleted', data);
 //                 }
 //               });
 //             })
 //             .catch(error => {
-//               console.log(error);
+//               console.error(error);
 //             });
 //         } else if (obj.Body === 'Information for discontinuing product') {
 //           axios.delete('http://localhost:1337/products/discontinued', product)
@@ -124,14 +124,14 @@ app.start();
 //               };
 //               productSQS.deleteMessage(deleteParams, (error, data) => {
 //                 if (error) {
-//                   console.log('Product queue delete error', error);
+//                   console.error('Product queue delete error', error);
 //                 } else {
-//                   console.log('Product queue message deleted', data);
+//                   console.error('Product queue message deleted', data);
 //                 }
 //               });
 //             })
 //             .catch(error => {
-//               console.log(error);
+//               console.error(error);
 //             });
 //         }
 //       // });

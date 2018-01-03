@@ -51,7 +51,7 @@ const addNewProduct = () => {
 
   productSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Product queue send error', error);
+      console.error('Product queue send error', error);
     } else {
       console.log('Product queue send success', data.MessageId);
     }
@@ -86,7 +86,7 @@ const restockProduct = (product) => {
 
   productSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Product queue send error', error);
+      console.error('Product queue send error', error);
     } else {
       console.log('Product queue send success', data.MessageId);
       return;
@@ -116,7 +116,7 @@ const discontinueProduct = (product) => {
 
   productSQS.sendMessage(params, (error, data) => {
     if (error) {
-      console.log('Product queue send error', error);
+      console.error('Product queue send error', error);
     } else {
       console.log('Product queue send success', data.MessageId);
       return;
