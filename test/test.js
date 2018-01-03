@@ -33,7 +33,7 @@ describe('Server', () => {
   });
 
   describe('Discontinued Products', () => {
-    it('should remove discontinued products to inventory', () => {
+    it('should remove discontinued products from inventory', () => {
       api.delete('/products/discontinued')
       .set('Accept', 'application/json')
       expect(202);
