@@ -8,6 +8,26 @@ const cache = redis.createClient();
 
 cache.on('error', error => console.log('Error', error));
 
+const addProduct = (product) => {
+  return cache.setAsync(product.id, product)
+    .catch(error => console.log('Error adding product to cache', error));
+};
+
+const removeProduct = (productId) => {
+  return cache.delAsync(productId)
+    .catch(error => console.log('Error removing product from cache', error));
+};
+
+const retrieveProduct = (productId) => {
+  return cache.getAsync(productId)
+    .catch(error => console.log('Error retrieving product from cache', error));
+};
+
+const updateProduct = (product) => {
+  return cache.setAsync(product.id, product)
+    .catch(error => console.log('Error updating product in cache'), error);
+};
+
 const addToCache = (product, productId) => {
   const keywords = product.toLowerCase().split(' ');
 

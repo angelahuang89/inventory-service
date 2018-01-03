@@ -30,7 +30,7 @@ app.get('/client/search/:query', (request, response) => {
   //   .catch(error => response.sendStatus(404));
 });
 
-app.get('/client/search/:id', (request, response) => {
+app.get('/client/searchid/:id', (request, response) => {
   const { params } = request;
   db.getProductInfo(params.id)
     .then(result => response.send(result))
