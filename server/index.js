@@ -19,22 +19,32 @@ app.options('/', (request, response) => response.json('GET,POST,PUT,PATCH,DELETE
 // return product results that match query
 app.get('/client/search/:query', (request, response) => {
   const { params } = request;
-  cache.retrieveIds(params.query)
-    .then(productIds => {
-      return db.searchById(productIds);
-    })
+  db.searchForProducts(params.query)
     .then(results => response.send(results))
     .catch(error => response.sendStatus(404));
-  // db.searchForProducts(params.query)
+  // cache.retrieveIds(params.query)
+  //   .then(productIds => {
+  //     return db.searchById(productIds);
+  //   })
   //   .then(results => response.send(results))
   //   .catch(error => response.sendStatus(404));
 });
 
 app.get('/client/searchid/:id', (request, response) => {
   const { params } = request;
-  db.getProductInfo(params.id)
+  cache.retrieveProduct(params.id)
     .then(result => response.send(result))
-    .catch(error => response.sendStatus(404));
+    .catch(() => {
+      db.getProductInfo(params.id)
+        .then(result => {
+          cache.addProduct(result);
+          response.send(result);
+        })
+        .catch(error => response.sendStatus(404));
+    });
+  // db.getProductInfo(params.id)
+  //   .then(result => response.send(result))
+  //   .catch(error => response.sendStatus(404));
 });
 
 app.post('/products/new', (request, response) => {
@@ -43,7 +53,7 @@ app.post('/products/new', (request, response) => {
   db.addNewProduct(body)
     .then(results => {
       const { product_name, id } = results;
-      cache.addProductToCache(product_name, id);
+      // cache.addProductToCache(product_name, id);
       clientSQS.sendNewProduct(results);
       bundleSQS.sendNewProduct(results);
       response.json(results);
@@ -56,7 +66,8 @@ app.delete('/products/discontinued', (request, response) => {
   const { product_name, id  } = request.body;
   db.removeProducts(id)
     .then(() => {
-      cache.removeFromCache(product_name, id);
+      cache.removeProduct(id);
+      // cache.removeFromCache(product_name, id);
       clientSQS.sendDiscontinued(id);
       bundleSQS.sendDiscontinued(id);
       response.sendStatus(204);
@@ -69,8 +80,9 @@ app.patch('/products/restock', (request, response) => {
   const { body } = request;
   db.restockProducts(body)
     .then(results => {
-      clientSQS.sendRestock(results.dataValues);
-      bundleSQS.sendRestock(results.dataValues);
+      cache.updateProduct(results);
+      clientSQS.sendRestock(results);
+      bundleSQS.sendRestock(results);
       response.sendStatus(204);
     })
     .catch(error => response.sendStatus(404));
@@ -81,8 +93,9 @@ app.patch('/purchases', (request, response) => {
   const { body } = request;
   db.updateProductCounts(body)
     .then(results => {
-      clientSQS.sendPurchase(results.dataValues);
-      bundleSQS.sendPurchase(results.dataValues);
+      cache.updateProduct(results);
+      clientSQS.sendPurchase(results);
+      bundleSQS.sendPurchase(results);
       response.sendStatus(204);
     })
     .catch(error => response.sendStatus(404));

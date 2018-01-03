@@ -47,7 +47,7 @@ const searchForProducts = (searchTerm) => {
     .then(results => {
       return results;
     })
-    .catch(error => console.log('Error in searching database', error));
+    .catch(error => console.error('Error in searching database', error));
 };
 
 const searchById = (productIds) => {
@@ -56,7 +56,7 @@ const searchById = (productIds) => {
       id: {[Op.or]: productIds}
     }
   })
-    .catch(error => console.log('Error finding products by id', error));
+    .catch(error => console.error('Error finding products by id', error));
 };
 
 const getProductInfo = (productId) => {
@@ -114,11 +114,14 @@ const restockProducts = (product) => {
       inventory_count: Sequelize.literal(`inventory_count + ${quantity}`)
     }, {
       where: {
-        id: productId
-      }
+        id: productId,
+      },
+      returning: true,
     })
-      .then(() => console.log('Updated inventory count after restock'))
-      // .catch(error => console.error('Error updating inventory after restock'), error);
+      .then(results => {
+        return results[1][0].dataValues;
+      })
+      .catch(error => console.error('Error updating inventory after restock'), error);
   // });
 };
 
@@ -126,17 +129,18 @@ const updateProductCounts = (product) => {
   // return productInfo.forEach(product => {
     const productId = parseInt(product.ProductId.StringValue, 10);
     const quantity = parseInt(product.Quantity.StringValue, 10);
-    console.log(quantity)
-    console.log(typeof quantity)
     return Inventory.update({
       inventory_count: Sequelize.literal(`inventory_count - ${quantity}`)
     }, {
       where: {
         id: productId
-      }
+      },
+      returning: true,
     })
-       .then(() => console.log('Updated inventory count after purchase'))
-       // .catch(error => console.error('Error updating inventory after purchase'), error);
+      .then(results => {
+        return results[1][0].dataValues;
+      })
+      .catch(error => console.error('Error updating inventory after purchase'), error);
   // });
 };
 
