@@ -2,56 +2,56 @@ config:
   target: 'http://localhost:1337'
   phases:
     - duration: 1
-      arrivalRate: 200
+      arrivalRate: 1000
   # defaults:
   #   headers:
   #     x-my-service-auth: '987401838271002188298567'
   processor: './productFaker.js'
 
 scenarios:
-  # - name: 'Search by id'
-  #   weight: 5
-  #   flow:
-  #     - function: 'getId'
-  #     - get:
-  #         url: '/client/searchid/{{ id }}'
-  #     - log: 'Sent a request to /client/searchid with {{ id }}'
-  # - name: 'Add new product'
-  #   weight: 3
-  #   flow:
-  #     - function: 'generateProduct'
-  #     - post:
-  #         url: '/products/new'
-  #         json:
-  #           product_name: '{{ product_name }}'
-  #           product_description: '{{ product_description }}'
-  #           product_image: '{{ product_image }}'
-  #           category: '{{ category }}'
-  #           price: '{{ price }}'
-  #           inventory_count: '{{ inventory_count }}'
-  #     - log: 'Sent a request to /products/new with {{ product_name }}, {{ product_description }}, {{ product_image }}, {{ category }}, {{ price }}, {{ inventory_count }}'
-  # - name: 'Restock product'
-  #   weight: 3
-  #   flow:
-  #     - function: 'restockProduct'
-  #     - patch:
-  #         url: '/products/restock'
-  #         json:
-  #           id: '{{ restockId }}'
-  #           quantity: '{{ restockQuantity }}'
-  #     - log: 'Sent a request to /product/restock with {{ restockId }}, {{ restockQuantity }}'
-  # - name: 'Process purchase'
-    # weight: 3
-    # flow:
-    #   - function: 'processPurchase'
-    #   - patch:
-    #       url: '/purchases'
-    #       json:
-    #         id: '{{ purchaseId }}'
-    #         quantity: '{{ purchaseQuantity }}'
-    #   - log: 'Sent a request to /purchases with {{ purchaseId }}, {{ purchaseQuantity }}'
+  - name: 'Retreive by id'
+    weight: 5
+    flow:
+      - function: 'getId'
+      - get:
+          url: '/client/retrieve/{{ id }}'
+      - log: 'Sent a request to /client/retrieve with {{ id }}'
+  - name: 'Add new product'
+    weight: 3
+    flow:
+      - function: 'generateProduct'
+      - post:
+          url: '/products/new'
+          json:
+            product_name: '{{ product_name }}'
+            product_description: '{{ product_description }}'
+            product_image: '{{ product_image }}'
+            category: '{{ category }}'
+            price: '{{ price }}'
+            inventory_count: '{{ inventory_count }}'
+      - log: 'Sent a request to /products/new with {{ product_name }}, {{ product_description }}, {{ product_image }}, {{ category }}, {{ price }}, {{ inventory_count }}'
+  - name: 'Restock product'
+    weight: 3
+    flow:
+      - function: 'restockProduct'
+      - patch:
+          url: '/products/restock'
+          json:
+            id: '{{ restockId }}'
+            quantity: '{{ restockQuantity }}'
+      - log: 'Sent a request to /product/restock with {{ restockId }}, {{ restockQuantity }}'
+  - name: 'Process purchase'
+    weight: 3
+    flow:
+      - function: 'processPurchase'
+      - patch:
+          url: '/purchases'
+          json:
+            id: '{{ purchaseId }}'
+            quantity: '{{ purchaseQuantity }}'
+      - log: 'Sent a request to /purchases with {{ purchaseId }}, {{ purchaseQuantity }}'
   - name: 'Search by query'
-    # weight: 3
+    weight: 3
     flow:
       - function: 'getQuery'
       - get:

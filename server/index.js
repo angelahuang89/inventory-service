@@ -19,9 +19,25 @@ app.options('/', (request, response) => response.json('GET,POST,PUT,PATCH,DELETE
 // return product results that match query
 app.get('/client/search/:query', (request, response) => {
   const { params } = request;
-  db.searchForProducts(params.query)
-    .then(results => response.send(results))
-    .catch(error => response.sendStatus(404));
+  cache.retrieveSearch(params.query)
+    .then(results => {
+      if (results !== null) {
+        response.send(JSON.stringify(results));
+      } else {
+        db.searchForProducts(params.query)
+          .then(results => {
+            cache.saveSearch(params.query, results);
+            response.send(results);
+          })
+          .catch(error => response.send(404));
+      }
+    })
+    .catch(error => response.send(404));
+  // db.searchForProducts(params.query)
+  //   .then(results => {
+  //     response.send(results)
+  //   })
+  //   .catch(error => response.sendStatus(404));
   // cache.retrieveIds(params.query)
   //   .then(productIds => {
   //     return db.searchById(productIds);
@@ -30,21 +46,25 @@ app.get('/client/search/:query', (request, response) => {
   //   .catch(error => response.sendStatus(404));
 });
 
-app.get('/client/searchid/:id', (request, response) => {
+app.get('/client/retrieve/:id', (request, response) => {
   const { params } = request;
-  cache.retrieveProduct(params.id)
-    .then(result => response.send(result))
-    .catch(() => {
-      db.getProductInfo(params.id)
-        .then(result => {
-          cache.addProduct(result);
-          response.send(result);
-        })
-        .catch(error => response.sendStatus(404));
-    });
-  // db.getProductInfo(params.id)
-  //   .then(result => response.send(result))
+  // cache.retrieveProduct(params.id)
+  //   .then(result => {
+  //     if (result !== null) {
+  //       response.send(JSON.parse(result))
+  //     } else {
+  //       db.getProductInfo(params.id)
+  //         .then(results => {
+  //           cache.addProduct(results[0].dataValues);
+  //           response.send(results[0].dataValues);
+  //         })
+  //         .catch(error => response.sendStatus(404));
+  //     }
+  //   })
   //   .catch(error => response.sendStatus(404));
+  db.getProductInfo(params.id)
+    .then(result => response.send(result))
+    .catch(error => response.sendStatus(404));
 });
 
 app.post('/products/new', (request, response) => {
@@ -66,7 +86,7 @@ app.delete('/products/discontinued', (request, response) => {
   const { product_name, id  } = request.body;
   db.removeProducts(id)
     .then(() => {
-      cache.removeProduct(id);
+      // cache.removeProduct(id);
       // cache.removeFromCache(product_name, id);
       clientSQS.sendDiscontinued(id);
       bundleSQS.sendDiscontinued(id);
@@ -80,7 +100,7 @@ app.patch('/products/restock', (request, response) => {
   const { body } = request;
   db.restockProducts(body)
     .then(results => {
-      cache.updateProduct(results);
+      // cache.updateProduct(results);
       clientSQS.sendRestock(results);
       bundleSQS.sendRestock(results);
       response.sendStatus(204);
@@ -93,7 +113,7 @@ app.patch('/purchases', (request, response) => {
   const { body } = request;
   db.updateProductCounts(body)
     .then(results => {
-      cache.updateProduct(results);
+      // cache.updateProduct(results);
       clientSQS.sendPurchase(results);
       bundleSQS.sendPurchase(results);
       response.sendStatus(204);
@@ -104,3 +124,11 @@ app.patch('/purchases', (request, response) => {
 const port = 1337;
 
 app.listen(port, () => console.log(`listening on port ${port}`));
+
+// const createConnection = port => {
+//   app.listen(port, () => console.log(`listening on port ${port}`));
+// }
+//
+// createConnection(1337);
+// createConnection(1338);
+// createConnection(1339);

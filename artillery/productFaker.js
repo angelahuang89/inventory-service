@@ -12,7 +12,7 @@ const generateProduct = (userContext, events, done) => {
 
   userContext.vars.product_name = product_name;
   userContext.vars.product_description = product_description;
-  userContext.vars.product_image = product_name;
+  userContext.vars.product_image = product_image;
   userContext.vars.category = category;
   userContext.vars.price = price;
   userContext.vars.inventory_count = inventory_count;
@@ -21,7 +21,7 @@ const generateProduct = (userContext, events, done) => {
 }
 
 const getQuery = (userContext, events, done) => {
-  const products = ['hat', 'towels', 'shirt', 'tuna', 'table', 'bike', 'hat', 'bacon', 'ball', 'soap', 'computer', 'salad', 'keyboard', 'pizza'];
+  const products = ['hat', 'towels', 'shirt', 'tuna', 'table', 'bike', 'hat', 'bacon', 'ball', 'soap', 'computer', 'salad', 'keyboard', 'pizza', 'gloves', 'car', 'chicken', 'cheese', 'chair', 'bacon', 'sausages', 'plastic', 'fresh', 'frozen', 'wooden', 'concrete', 'granite', 'metal', 'rubber', 'cotton', 'mouse', 'pants', 'table', 'steel', 'soap'];
 
   userContext.vars.query = products[Math.floor(Math.random() * products.length)];
 
