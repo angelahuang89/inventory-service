@@ -8,25 +8,46 @@ const cache = redis.createClient();
 
 cache.on('error', error => console.log('Error', error));
 
-const addProduct = (product) => {
-  return cache.setAsync(product.id, product)
-    .catch(error => console.error('Error adding product to cache', error));
-};
+const saveSearch = (query, products) => {
+  return cache.setAsync(query, JSON.stringify(products), 'EX', 1800)
+    .catch(error => console.error('Error adding search results to cache', error));
+}
 
-const removeProduct = (productId) => {
-  return cache.delAsync(productId)
-    .catch(error => console.error('Error removing product from cache', error));
-};
+const retrieveSearch = (query) => {
+  return cache.getAsync(query)
+    .then(results => {
+      return results;
+    })
+    .catch(error => console.error('Error retrieving saved search from cache', error));
+}
 
-const retrieveProduct = (productId) => {
-  return cache.getAsync(productId)
-    .catch(error => console.error('Error retrieving product from cache', error));
-};
-
-const updateProduct = (product) => {
-  return cache.setAsync(product.id, product)
-    .catch(error => console.error('Error updating product in cache'), error);
-};
+// const addProduct = (product) => {
+//   return cache.setAsync(product.id, JSON.stringify(product))
+//     .catch(error => console.error('Error adding product to cache', error));
+// };
+//
+// const removeProduct = (productId) => {
+//   return cache.delAsync(productId)
+//     .catch(error => console.error('Error removing product from cache', error));
+// };
+//
+// const retrieveProduct = (productId) => {
+//   return cache.getAsync(productId)
+//     .then(results => {
+//       return results
+//     })
+//     .catch(error => console.error('Error retrieving product from cache', error));
+// };
+//
+// const updateProduct = (product) => {
+//   cache.retrieveProduct(product.id)
+//     .then(results => {
+//       if (results !== null) {
+//         cache.setAsync(product.id, JSON.stringify(product))
+//           .catch(error => console.error('Error updating product in cache'), error);
+//       }
+//     })
+// };
 
 // const addToCache = (product, productId) => {
 //   const keywords = product.toLowerCase().split(' ');
@@ -57,10 +78,12 @@ const updateProduct = (product) => {
 // };
 
 exports.cache = cache;
-exports.addProduct = addProduct;
-exports.removeProduct = removeProduct;
-exports.retrieveProduct = retrieveProduct;
-exports.updateProduct = updateProduct;
+exports.saveSearch = saveSearch;
+exports.retrieveSearch = retrieveSearch;
+// exports.addProduct = addProduct;
+// exports.removeProduct = removeProduct;
+// exports.retrieveProduct = retrieveProduct;
+// exports.updateProduct = updateProduct;
 // exports.addProductToCache = addToCache;
 // exports.removeFromCache = removeFromCache;
 // exports.retrieveIds = retrieveIds;
