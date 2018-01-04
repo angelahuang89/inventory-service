@@ -1,7 +1,8 @@
 const should = require('chai').should();
 const expect = require('chai').expect;
+const assert = require('assert');
 const supertest = require('supertest');
-const api = supertest('http://localhost:1337');
+const server = supertest('http://localhost:1337');
 const request = require('request');
 const Sequelize = require('sequelize');
 // const db = require('../database/postgres.js');
@@ -11,22 +12,36 @@ describe('Server', () => {
 
   describe('Options', () => {
     it('should return options \'GET,POST,PUT,PATCH,GET\'', () => {
-      api.options('/')
-      expect('GET,POST,PUT,PATCH,GET');
+      server
+        .options('/')
+        .expect('GET,POST,PUT,PATCH,GET');
     });
   });
 
   describe('Client Search', () => {
     it('should return products matching search term', () => {
-      api.get('/client/search')
-      .set('Accept', 'application/json')
-      expect(200);
+      server
+        .get('/client/search')
+        .set('Accept', 'application/json')
+        .expect(200);
+    });
+  });
+
+  describe('Client Search by Id', () => {
+    it('should return product by id', () => {
+      server
+        .get('/client/searchid/12345')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then(result => {
+          expect(result.id).to.eql(12345);
+        });
     });
   });
 
   describe('New Products', () => {
     it('should add new products to inventory', () => {
-      api.post('/products/new')
+      server.post('/products/new')
       .set('Accept', 'application/json')
       expect(201);
     });
@@ -34,7 +49,7 @@ describe('Server', () => {
 
   describe('Discontinued Products', () => {
     it('should remove discontinued products from inventory', () => {
-      api.delete('/products/discontinued')
+      server.delete('/products/discontinued')
       .set('Accept', 'application/json')
       expect(202);
     });
@@ -42,7 +57,7 @@ describe('Server', () => {
 
   describe('Restock of Products', () => {
     it('should restock products in inventory', () => {
-      api.patch('/products/restock')
+      server.patch('/products/restock')
       .set('Accept', 'application/json')
       expect(204);
     });
@@ -50,7 +65,7 @@ describe('Server', () => {
 
   describe('Purchases', () => {
     it('should update inventory after purchases', () => {
-      api.patch('/purchases')
+      server.patch('/purchases')
       .set('Accept', 'application/json')
       expect(204);
     });
