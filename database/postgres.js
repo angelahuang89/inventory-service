@@ -108,8 +108,10 @@ const removeProducts = (productIds) => {
 
 const restockProducts = (product) => {
   // return productInfo.forEach(product => {
-    const productId = parseInt(product.ProductId.StringValue, 10);
-    const quantity = parseInt(product.Quantity.StringValue, 10);
+    // const productId = parseInt(product.ProductId.StringValue, 10);
+    // const quantity = parseInt(product.Quantity.StringValue, 10);
+    const productId = product.id;
+    const quantity = product.quantity;
     return Inventory.update({
       inventory_count: Sequelize.literal(`inventory_count + ${quantity}`)
     }, {
@@ -121,14 +123,16 @@ const restockProducts = (product) => {
       .then(results => {
         return results[1][0].dataValues;
       })
-      .catch(error => console.error('Error updating inventory after restock'), error);
+      .catch(error => console.error('Error updating inventory after restock', error));
   // });
 };
 
 const updateProductCounts = (product) => {
   // return productInfo.forEach(product => {
-    const productId = parseInt(product.ProductId.StringValue, 10);
-    const quantity = parseInt(product.Quantity.StringValue, 10);
+    // const productId = parseInt(product.ProductId.StringValue, 10);
+    // const quantity = parseInt(product.Quantity.StringValue, 10);
+    const productId = product.id;
+    const quantity = product.quantity;
     return Inventory.update({
       inventory_count: Sequelize.literal(`inventory_count - ${quantity}`)
     }, {
@@ -140,7 +144,7 @@ const updateProductCounts = (product) => {
       .then(results => {
         return results[1][0].dataValues;
       })
-      .catch(error => console.error('Error updating inventory after purchase'), error);
+      .catch(error => console.error('Error updating inventory after purchase', error));
   // });
 };
 
