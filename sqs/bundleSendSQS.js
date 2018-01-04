@@ -6,16 +6,16 @@ const bundleSQS = new AWS.SQS({apiVersion: '2012-11-05'});
 const queueUrl = 'https://sqs.us-west-1.amazonaws.com/379538513358/bundleQueue';
 
 const sendRestock = (product) => {
-  const { productId, quantity } = product;
+  const { id, inventory_count } = product;
   const params = {
     MessageAttributes: {
       'ProductId': {
         DataType: 'Number',
-        StringValue: `${productId}`,
+        StringValue: `${id}`,
       },
       'Quantity': {
         DataType: 'Number',
-        StringValue: `${quantity}`,
+        StringValue: `${inventory_count}`,
       },
     },
     MessageBody: 'Information for restocking product',
@@ -32,16 +32,16 @@ const sendRestock = (product) => {
 }
 
 const sendPurchase = (product) => {
-  const { productId, quantity } = product;
+  const { id, inventory_count } = product;
   const params = {
     MessageAttributes: {
       'ProductId': {
         DataType: 'Number',
-        StringValue: `${productId}`,
+        StringValue: `${id}`,
       },
       'Quantity': {
         DataType: 'Number',
-        StringValue: `${quantity}`,
+        StringValue: `${inventory_count}`,
       },
     },
     MessageBody: 'Information for decreasing product count',
