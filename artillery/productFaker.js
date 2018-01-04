@@ -20,7 +20,7 @@ const generateProduct = (userContext, events, done) => {
   return done();
 }
 
-const getQuery = (userContext, events,done) => {
+const getQuery = (userContext, events, done) => {
   const products = ['hat', 'towels', 'shirt', 'tuna', 'table', 'bike', 'hat', 'bacon', 'ball', 'soap', 'computer', 'salad', 'keyboard', 'pizza'];
 
   userContext.vars.query = products[Math.floor(Math.random() * products.length)];
@@ -28,7 +28,38 @@ const getQuery = (userContext, events,done) => {
   return done();
 }
 
+const getId = (userContext, events, done) => {
+  const randomId = Math.floor(Math.random() * 2000000);
+
+  userContext.vars.id = randomId;
+
+  return done();
+};
+
+const restockProduct = (userContext, events, done) => {
+  const randomId = Math.floor(Math.random() * 2000000);
+  const randomQuantity = Math.floor(Math.random() * 10000);
+
+  userContext.vars.restockId = randomId;
+  userContext.vars.restockQuantity = randomQuantity;
+
+  return done();
+};
+
+const processPurchase = (userContext, events, done) => {
+  const randomId = Math.floor(Math.random() * 2000000);
+  const randomQuantity = Math.floor(Math.random() * 10000);
+
+  userContext.vars.purchaseId = randomId;
+  userContext.vars.purchaseQuantity = randomQuantity;
+
+  return done();
+};
+
 module.exports = {
   generateProduct,
-  getQuery
+  getQuery,
+  getId,
+  restockProduct,
+  processPurchase,
 };
